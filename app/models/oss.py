@@ -2,7 +2,7 @@ from enum import Enum
 from typing import TYPE_CHECKING, Optional
 from sqlmodel import Relationship, SQLModel, Field
 
-from app.routers.schemas.oss import PlateFormEnum
+from app.routers.schemas.oss import OssStatusEnum, PlateFormEnum
 
 from app.models.user import DBUser
 
@@ -17,3 +17,6 @@ class DBOss(SQLModel, table=True):
     ak: str
     sk: str
     plateform: PlateFormEnum
+    endpoint: str
+    bucket_name: str
+    status: OssStatusEnum = Field(default="normal")

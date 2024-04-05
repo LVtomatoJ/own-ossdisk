@@ -15,6 +15,7 @@ from app.routers.schemas.family import (
 from app.routers.schemas.oss import OssAccountCreate, OssAccountRead
 from app.routers.schemas.user import UserCreate, UserRead, UserReadWithFamily
 from app.dependencies.auth import get_current_user
+from app.routers.utils.oss import check_oss_account
 from app.routers.utils.user import (
     create_one_family,
     create_one_oss_account,
@@ -53,6 +54,7 @@ def create_oss_account(
     current_user: Annotated[DBUser, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
+    check_oss_account(oss_account=oss_account)
     oss_account = create_one_oss_account(
         session=session, oss_account=oss_account, user_id=current_user.id
     )

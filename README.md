@@ -16,3 +16,4 @@ FastApi: <https://fastapi.tiangolo.com/zh/learn/>
 Uvicorn: <https://www.uvicorn.org/>
 SQLModel: <https://sqlmodel.tiangolo.com/>
 Poetry: <https://python-poetry.org/>
+AliyunOSS <https://aliyun-oss-python-sdk.readthedocs.io/en/latest/>
