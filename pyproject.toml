@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "self-netdisk"
+name = "own-ossdisk"
 version = "0.1.0"
 description = ""
 authors = ["lvtomatoj <lvtomatoj@gmail.com>"]
