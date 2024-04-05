@@ -11,7 +11,6 @@ from app.routers.utils.common import (
     check_user_by_username_password,
     create_access_token,
 )
-from app.routers.error import NotFoundException, login_exception
 
 router = APIRouter()
 

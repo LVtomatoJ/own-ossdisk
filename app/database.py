@@ -1,5 +1,6 @@
 from sqlmodel import Session, create_engine
-from app.models import user
+from app.models.user import DBUser
+from app.models.oss import DBOss
 
 engine = create_engine("sqlite:///database.db")
 

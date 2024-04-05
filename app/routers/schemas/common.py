@@ -12,3 +12,8 @@ class TokenUser(BaseModel):
 
 class TokenData(BaseModel):
     username: str
+
+
+class UserRead(BaseModel):
+    id: int
+    username: str

@@ -1,10 +1,11 @@
 from pydantic import BaseModel
-from sqlmodel import SQLModel
+
+from app.routers.schemas.common import UserRead
+from app.routers.schemas.family import FamilyRead
 
 
-class UserRead(BaseModel):
-    id: int
-    username: str
+class UserReadWithFamily(UserRead):
+    family: FamilyRead | None = None
 
 
 class UserCreate(BaseModel):
