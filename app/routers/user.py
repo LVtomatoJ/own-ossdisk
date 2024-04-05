@@ -1,9 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
-from sqlmodel import Session, select
+from sqlmodel import select
 
-from app.database import get_session
 from app.dependencies.db import DBSessionDep
 from app.models.family import DBFamily
 from app.models.user import DBUser
@@ -23,13 +21,10 @@ from app.routers.utils.user import (
     delete_one_oss_account,
     get_one_oss_account_by_id,
     get_one_user_by_username,
-    get_user_oss_accounts_by_user_id,
 )
 
 
 router = APIRouter()
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.get("/users/", response_model=UserReadWithFamily)
@@ -40,7 +35,7 @@ def read_users(
 
 
 @router.post("/user/", response_model=UserRead)
-def create_user(user: UserCreate, session: Session = Depends(get_session)):
+def create_user(user: UserCreate, session: DBSessionDep):
     is_exist = get_one_user_by_username(session=session, username=user.username)
     if is_exist:
         raise HTTPException(status_code=400, detail="Username exist!")
@@ -52,7 +47,7 @@ def create_user(user: UserCreate, session: Session = Depends(get_session)):
 def create_oss_account(
     oss_account: OssAccountCreate,
     current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ):
     check_oss_account(oss_account=oss_account)
     oss_account = create_one_oss_account(
@@ -65,7 +60,7 @@ def create_oss_account(
 def delete_oss_account(
     oss_account_id: int,
     current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ):
     # 检查是否存在&&是否是自己的
     oss_account = get_one_oss_account_by_id(
@@ -82,7 +77,7 @@ def delete_oss_account(
 @router.get("/user/oss-accounts")
 def get_user_oss_accounts(
     current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ) -> list[OssAccountRead]:
     """
     获取用户所有oss账号
@@ -95,7 +90,7 @@ def get_user_oss_accounts(
 def create_user_famliy(
     family: FamilyCreate,
     current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ) -> FamilyReadWithMembers:
     """
     创建用户家庭
@@ -117,7 +112,7 @@ def create_user_famliy(
 @router.get("/user/family")
 def get_my_family(
     current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ) -> FamilyReadWithMembers:
     """
     获取用户家庭
@@ -130,7 +125,7 @@ def get_my_family(
 def add_member_to_family(
     current_user: Annotated[DBUser, Depends(get_current_user)],
     add_memeber: FamilyMemberSelect,
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ) -> FamilyReadWithMembers:
     """
     添加家庭成员
@@ -163,7 +158,7 @@ def add_member_to_family(
 @router.delete("/user/family/member")
 def delete_family_member(
     delete_member: FamilyMemberSelect,
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
     current_user: DBUser = Depends(get_current_user),
 ) -> FamilyReadWithMembers:
     family = current_user.family

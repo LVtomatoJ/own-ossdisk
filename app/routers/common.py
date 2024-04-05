@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from sqlmodel import Session
 
 from app.database import get_session
+from app.dependencies.db import DBSessionDep
 from app.routers.utils.common import (
     check_user_by_username_password,
     create_access_token,
@@ -26,7 +27,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 @router.post("/token")
 def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    session: Session = Depends(get_session),
+    session: DBSessionDep,
 ) -> Token:
     username = form_data.username
     password = form_data.password
