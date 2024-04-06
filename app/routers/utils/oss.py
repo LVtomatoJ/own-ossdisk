@@ -42,6 +42,12 @@ def get_object_download_url(oss_account: DBOss, object_key: str, expires: int):
     return url
 
 
+def get_object_upload_url(oss_account: DBOss, object_key: str):
+    bucket = get_bucket(oss_account)
+    url = bucket.sign_url(method="PUT", key=object_key)
+    return url
+
+
 def delete_object(oss_account: DBOss, object_key: str):
     bucket = get_bucket(oss_account)
     bucket.delete_object(object_key)

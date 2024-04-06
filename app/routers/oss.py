@@ -7,7 +7,11 @@ from pydantic_core import Url
 from app.dependencies.oss import get_oss_db
 from app.models.oss import DBOss
 from app.routers.schemas.oss import DirPath, FilePath, OssObjectBase
-from app.routers.utils.oss import get_object_download_url, get_oss_objects_list
+from app.routers.utils.oss import (
+    get_object_download_url,
+    get_object_upload_url,
+    get_oss_objects_list,
+)
 
 
 router = APIRouter()
@@ -44,3 +48,15 @@ def delete_object(
 ):
     delete_object(oss_model, object_key)
     return {"message": "delete success"}
+
+
+@router.post(
+    "/oss/{oss_id}/object",
+    response_model=Annotated[Url, UrlConstraints(allowed_schemes=["http", "https"])],
+)
+def upload_object(
+    object_key: FilePath,
+    oss_model: DBOss = Depends(get_oss_db),
+):
+    url = get_object_upload_url(oss_model, object_key)
+    return url

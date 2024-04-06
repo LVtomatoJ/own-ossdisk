@@ -1,9 +1,17 @@
 
 # 启动
 
+## backend
+
 poetry shell
 poetry install
 uvicorn app.main:app --reload
+
+## frontend
+
+cd own-ossdisk
+bun install
+bun run dev
 
 # 须知
 
