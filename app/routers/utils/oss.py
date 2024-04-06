@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-from sqlmodel import Session
 from oss2 import Auth, Bucket
 from app.models.oss import DBOss
 from app.routers.schemas.oss import OssAccountCreate

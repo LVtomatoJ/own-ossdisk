@@ -1,5 +1,3 @@
-from enum import Enum
-from typing import TYPE_CHECKING, Optional
 from sqlmodel import Relationship, SQLModel, Field
 
 from app.routers.schemas.oss import OssStatusEnum, PlateFormEnum

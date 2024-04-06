@@ -1,8 +1,5 @@
 from contextlib import asynccontextmanager
-from typing import Union
-
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from sqlmodel import SQLModel
 
 from app.routers import common, oss, user

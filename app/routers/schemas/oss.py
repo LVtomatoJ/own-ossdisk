@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Annotated, Optional
 from fastapi.params import Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class OssStatusEnum(str, Enum):

@@ -1,12 +1,9 @@
 from datetime import timedelta
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
-from sqlmodel import Session
-
-from app.database import get_session
 from app.dependencies.db import DBSessionDep
 from app.routers.utils.common import (
     check_user_by_username_password,
