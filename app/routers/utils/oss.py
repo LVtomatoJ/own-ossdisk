@@ -28,12 +28,10 @@ def check_oss_account(oss_account: OssAccountCreate):
         raise HTTPException(status_code=400, detail="oss account error")
 
 
-def get_oss_objects(oss_account: DBOss):
+def get_oss_objects_list(oss_account: DBOss, prefix: str):
     bucket = get_bucket(oss_account)
     list_objects: oss2.models.ListObjectsV2Result = bucket.list_objects_v2(
-        delimiter="/"
+        delimiter="/", prefix=prefix
     )
     object_list: list[oss2.models.SimplifiedObjectInfo] = list_objects.object_list
-    for object in object_list:
-        print(object.key)
-    print(object_list)
+    return object_list

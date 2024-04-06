@@ -12,7 +12,7 @@ from app.routers.schemas.family import (
 )
 from app.routers.schemas.oss import OssAccountCreate, OssAccountRead
 from app.routers.schemas.user import UserCreate, UserRead, UserReadWithFamily
-from app.dependencies.auth import get_current_user
+from app.dependencies.auth import JWTAuthDep, get_current_user
 from app.routers.utils.oss import check_oss_account
 from app.routers.utils.user import (
     create_one_family,
@@ -59,7 +59,7 @@ def create_oss_account(
 @router.delete("/user/oss-account/{oss_account_id}")
 def delete_oss_account(
     oss_account_id: int,
-    current_user: Annotated[DBUser, Depends(get_current_user)],
+    user_model: JWTAuthDep,
     session: DBSessionDep,
 ):
     # 检查是否存在&&是否是自己的
@@ -68,7 +68,7 @@ def delete_oss_account(
     )
     if not oss_account:
         raise HTTPException(status_code=404, detail="oss_account not found")
-    if oss_account.user_id != current_user.id:
+    if oss_account.user_id != user_model.id:
         raise HTTPException(status_code=403, detail="not your oss_account")
     delete_one_oss_account(session=session, oss_account=oss_account)
     return {"msg": "success"}
@@ -76,64 +76,62 @@ def delete_oss_account(
 
 @router.get("/user/oss-accounts")
 def get_user_oss_accounts(
-    current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: DBSessionDep,
+    user_model: JWTAuthDep,
 ) -> list[OssAccountRead]:
     """
     获取用户所有oss账号
     """
-    user_oss_accounts = current_user.oss_accounts
+    user_oss_accounts = user_model.oss_accounts
     return user_oss_accounts
 
 
 @router.post("/user/famliy")
 def create_user_famliy(
     family: FamilyCreate,
-    current_user: Annotated[DBUser, Depends(get_current_user)],
+    user_model: JWTAuthDep,
     session: DBSessionDep,
 ) -> FamilyReadWithMembers:
     """
     创建用户家庭
     """
     if not family.owner_user_id:
-        family.owner_user_id = current_user.id
+        family.owner_user_id = user_model.id
     else:
-        if family.owner_user_id != current_user.id:
+        if family.owner_user_id != user_model.id:
             raise HTTPException(
                 status_code=403,
                 detail="family owner_user_id must be current_user.id",
             )
     family_in_db = create_one_family(session, family)
-    current_user.family = family_in_db
+    user_model.family = family_in_db
     session.commit()
     return family_in_db
 
 
 @router.get("/user/family")
 def get_my_family(
-    current_user: Annotated[DBUser, Depends(get_current_user)],
-    session: DBSessionDep,
+    user_model: JWTAuthDep,
 ) -> FamilyReadWithMembers:
     """
     获取用户家庭
     """
-    family = current_user.family
+    family = user_model.family
     return family
 
 
 @router.post("/user/family/memeber")
 def add_member_to_family(
-    current_user: Annotated[DBUser, Depends(get_current_user)],
+    user_model: JWTAuthDep,
     add_memeber: FamilyMemberSelect,
     session: DBSessionDep,
 ) -> FamilyReadWithMembers:
     """
     添加家庭成员
     """
-    family: DBFamily = current_user.family
+    family: DBFamily = user_model.family
     if not family:
         raise HTTPException(status_code=404, detail="user have no family")
-    if family.owner_user_id != current_user.id:
+    if family.owner_user_id != user_model.id:
         raise HTTPException(status_code=403, detail="only family owner can add member")
     if not add_memeber.username and not add_memeber.user_id:
         raise HTTPException(
@@ -159,12 +157,12 @@ def add_member_to_family(
 def delete_family_member(
     delete_member: FamilyMemberSelect,
     session: DBSessionDep,
-    current_user: DBUser = Depends(get_current_user),
+    user_model: JWTAuthDep,
 ) -> FamilyReadWithMembers:
-    family = current_user.family
+    family = user_model.family
     if not family:
         raise HTTPException(status_code=404, detail="user have no family")
-    if family.owner_user_id != current_user.id:
+    if family.owner_user_id != user_model.id:
         raise HTTPException(status_code=403, detail="only family owner can add member")
     if not delete_member.username and not delete_member.user_id:
         raise HTTPException(

@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class OssStatusEnum(str, Enum):
@@ -27,3 +27,9 @@ class OssAccountRead(BaseModel):
     endpoint: str
     bucket_name: str
     status: OssStatusEnum
+
+
+class OssObjectBase(BaseModel):
+    key: str
+    size: int
+    last_modified: int

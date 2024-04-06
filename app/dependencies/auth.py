@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session
 from app.database import get_session
 from app.dependencies.db import DBSessionDep
+from app.models.user import DBUser
 from app.routers.schemas.common import TokenData
 from app.routers.utils.user import get_one_user_by_username
 from fastapi import Depends, HTTPException
@@ -34,3 +35,6 @@ async def get_current_user(
     if not user:
         raise HTTPException(status_code=401, detail="not user")
     return user
+
+
+JWTAuthDep = Annotated[DBUser, Depends(get_current_user)]
