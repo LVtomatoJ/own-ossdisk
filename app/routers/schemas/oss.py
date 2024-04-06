@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import Optional
+from typing import Annotated, Optional
+from fastapi.params import Query
 from pydantic import BaseModel, Field
 
 
@@ -33,3 +34,7 @@ class OssObjectBase(BaseModel):
     key: str
     size: int
     last_modified: int
+
+
+DirPath = Annotated[str | None, Query(regex=".+/$")]
+FilePath = Annotated[str, Query(regex=".+")]

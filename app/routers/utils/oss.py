@@ -35,3 +35,15 @@ def get_oss_objects_list(oss_account: DBOss, prefix: str):
     )
     object_list: list[oss2.models.SimplifiedObjectInfo] = list_objects.object_list
     return object_list
+
+
+def get_object_download_url(oss_account: DBOss, object_key: str, expires: int):
+    bucket = get_bucket(oss_account)
+    url = bucket.sign_url("GET", object_key, expires=expires)
+    return url
+
+
+def delete_object(oss_account: DBOss, object_key: str):
+    bucket = get_bucket(oss_account)
+    bucket.delete_object(object_key)
+    return True
