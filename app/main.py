@@ -5,6 +5,8 @@ from sqlmodel import SQLModel
 from app.routers import common, oss, user
 from app.database import engine
 
+from fastapi.middleware.cors import CORSMiddleware
+
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
@@ -13,6 +15,20 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5137",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 app.include_router(common.router)
