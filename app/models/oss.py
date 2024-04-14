@@ -17,4 +17,4 @@ class DBOss(SQLModel, table=True):
     plateform: PlateFormEnum
     endpoint: str
     bucket_name: str
-    status: OssStatusEnum = Field(default="normal")
+    status: OssStatusEnum = Field(default=OssStatusEnum.normal.value)

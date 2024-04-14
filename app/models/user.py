@@ -3,6 +3,7 @@ from sqlmodel import Relationship, SQLModel, Field
 
 from app.models.family import DBFamily
 
+from pydantic_extra_types.phone_numbers import PhoneNumber
 
 if TYPE_CHECKING:
 
