@@ -1,10 +1,16 @@
 <template>
-    index
+    <v-btn @click="goLogin">
+    Go Login
+    </v-btn>
 </template>
 
 <script setup>
-import { useMyFetch } from '../request/useMyFetch';
+import { useRouter } from 'vue-router'
 
-const { isFetching, error, data } = useMyFetch('')
+const router = useRouter()
+
+const goLogin = () => {
+    router.push({ name: 'login' })
+}
 
 </script>

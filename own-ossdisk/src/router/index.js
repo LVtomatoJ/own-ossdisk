@@ -4,8 +4,8 @@ import HomeView from '../view/HomeView.vue'
 import LoginView from '../view/LoginView.vue'
 
 const routes = [
-    { path: '/', component: HomeView },
-    { path: '/login', component: LoginView },
+    { path: '/', component: HomeView, name: 'home' },
+    { path: '/login', component: LoginView, name: 'login' },
 ]
 
 

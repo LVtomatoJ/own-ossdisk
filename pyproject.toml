@@ -16,6 +16,7 @@ pydantic-settings = "^2.2.1"
 python-multipart = "^0.0.9"
 oss2 = "^2.18.4"
 pydantic-extra-types = "^2.6.0"
+phonenumbers = "^8.13.34"
 
 
 [build-system]

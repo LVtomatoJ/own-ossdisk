@@ -10,6 +10,12 @@ const useMyFetch = createFetch({
 
         //     return { options }
         // },
+        onFetchError(ctx) {
+            if (ctx.data) {
+                ctx.error = ctx.data
+                return ctx
+            }
+        }
     },
 })
 export { useMyFetch }
