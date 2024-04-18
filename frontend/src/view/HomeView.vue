@@ -5,12 +5,11 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 
-const router = useRouter()
+const router = useRouter();
 
 const goLogin = () => {
-    router.push({ name: 'login' })
-}
-
+	router.push({ name: "login" });
+};
 </script>

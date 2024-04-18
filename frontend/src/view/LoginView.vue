@@ -80,21 +80,20 @@
 </template>
 
 <script setup>
-import { loginAPI } from '../request/api/user';
-import { ref } from 'vue'
-const username = ref('')
-const password = ref('')
-const visible = ref(false)
-const loginError = ref(null)
+import { ref } from "vue";
+import { loginAPI } from "../request/api/user";
+const username = ref("");
+const password = ref("");
+const visible = ref(false);
+const loginError = ref(null);
 const handleLogIn = async () => {
-  const { data, error } = await loginAPI(username.value, password.value)
-  if (error.value != null) {
-    console.error(error)
-    loginError.value = error.value
-  } else {
-    loginError.value = null
-    console.log(data)
-  }
-}
-
+	const { data, error } = await loginAPI(username.value, password.value);
+	if (error.value != null) {
+		console.error(error);
+		loginError.value = error.value;
+	} else {
+		loginError.value = null;
+		console.log(data);
+	}
+};
 </script>
