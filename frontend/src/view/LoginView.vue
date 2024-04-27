@@ -82,18 +82,29 @@
 <script setup>
 import { ref } from "vue";
 import { loginAPI } from "../request/api/user";
+import { useAuthStore } from "../store/auth"
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const userStore = useAuthStore();
 const username = ref("");
 const password = ref("");
 const visible = ref(false);
 const loginError = ref(null);
 const handleLogIn = async () => {
-	const { data, error } = await loginAPI(username.value, password.value);
-	if (error.value != null) {
-		console.error(error);
-		loginError.value = error.value;
-	} else {
-		loginError.value = null;
-		console.log(data);
-	}
+  const { data, error } = await loginAPI(username.value, password.value);
+  if (error.value != null) {
+    // 登录失败
+    console.error(error);
+    loginError.value = error.value;
+  } else {
+    // 登录成功
+    loginError.value = null;
+    const { access_token, token_type } = data.value;
+    userStore.setToken(access_token, token_type);
+    // 跳转到用户页面
+    router.push({ name: "user" });
+  }
 };
 </script>

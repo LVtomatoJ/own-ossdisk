@@ -27,14 +27,14 @@ from app.routers.utils.user import (
 router = APIRouter()
 
 
-@router.get("/users/", response_model=UserReadWithFamily)
+@router.get("/user", response_model=UserReadWithFamily)
 def read_users(
     current_user: Annotated[DBUser, Depends(get_current_user)],
 ):
     return current_user
 
 
-@router.post("/user/", response_model=UserRead)
+@router.post("/user", response_model=UserRead)
 def create_user(user: UserCreate, session: DBSessionDep):
     is_exist = get_one_user_by_username(session=session, username=user.username)
     if is_exist:

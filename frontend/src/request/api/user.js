@@ -4,4 +4,8 @@ const loginAPI = (username, password) => {
 	return useMyFetch("/login").post({ username, password }).json();
 };
 
-export { loginAPI };
+const userAPI = () => {
+	return useMyFetch("/user").get().json();
+};
+
+export { loginAPI, userAPI };
