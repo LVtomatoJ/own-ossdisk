@@ -19,12 +19,14 @@
                 <p>ID: {{ id }}</p>
             </v-card-text>
         </v-card>
+        <DiskList />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import { userAPI } from "../../../request/api/user";
+import DiskList from "../../../components/disk/DiskList.vue";
 const family = ref("");
 const id = ref("");
 const username = ref("");
